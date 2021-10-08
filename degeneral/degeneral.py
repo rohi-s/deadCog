@@ -38,7 +38,7 @@ class deGen(commands.Cog):
     async def red_delete_data_for_user(self, *, requester, user_id: int) -> None:
         pass
     
-    async def sendhookEngine(self, ctgx, messageObj, webhookText=None, webhookUser=None, webhookAvatar=None, member: discord.Member, channel: discord.TextChannel=None):
+    async def sendhookEngine(self, ctx, messageObj, member: discord.Member, channel: discord.TextChannel=None, webhookText=None, webhookUser=None, webhookAvatar=None):
         if channel == None:
             channel = ctx.message.channel
         # Start webhook session
