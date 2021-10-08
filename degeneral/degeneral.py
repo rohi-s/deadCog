@@ -1,9 +1,13 @@
 #general cog but no hug
 
 import discord
+from discord import Webhook, AsyncWebhookAdapter
+import asyncio
+import requests
+import json
 import urllib.parse
 import aiohttp
-from redbot.core import commands
+from redbot.core import Config, commands, checks
 from redbot.core.i18n import Translator, cog_i18n
 from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
 from redbot.core.utils.chat_formatting import (
@@ -27,6 +31,49 @@ class deGen(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        
+    # This cog does not store any End User Data
+    async def red_get_data_for_user(self, *, user_id: int):
+        return {}
+    async def red_delete_data_for_user(self, *, requester, user_id: int) -> None:
+        pass
+    
+    async def sendhookEngine(self, toWebhook, messageObj, webhookText=None, webhookUser=None, webhookAvatar=None):
+        # Start webhook session
+        async with aiohttp.ClientSession() as session:
+            webhook = Webhook.from_url(toWebhook, adapter=AsyncWebhookAdapter(session))
+
+            # Check for attachments
+            if messageObj.attachments:
+                # Send message first if there is a message
+                if webhookText is not None:
+                    await webhook.send(
+                        webhookText,
+                        username=webhookUser,
+                        avatar_url=webhookAvatar
+                    )
+                # Then send each attachment in separate messages
+                for msgAttach in messageObj.attachments:
+                    try:
+                        await webhook.send(
+                            username=webhookUser,
+                            avatar_url=webhookAvatar,
+                            file=await msgAttach.to_file()
+                        )
+                    except:
+                        # Couldn't send, retry sending file as url only
+                        await webhook.send(
+                            "File: "+str(msgAttach.url), 
+                            username=webhookUser,
+                            avatar_url=webhookAvatar
+                        )
+            else:
+                await webhook.send(
+                    webhookText,
+                    username=webhookUser,
+                    avatar_url=webhookAvatar
+                )
+
 
     @commands.command()
     async def urban(self, ctx, *, word):
@@ -118,3 +165,19 @@ class deGen(commands.Cog):
             await ctx.send(
                 _("No Urban Dictionary entries were found, or there was an error in the process.")
             )
+            
+    @commands.command()
+    async def sendhookself(self, ctx, webhookUrl, *, webhookText=None):
+        """Send a webhook as yourself
+        
+        webhookUrl can be an alias"""
+
+        message = ctx.message
+
+        # Send webhook
+        try:
+            await self.sendhookEngine(webhookUrl, message, webhookText, message.author.display_name, message.author.avatar_url)
+        except:
+            await ctx.send("Oops, an error occurred :'(")
+        else:
+            await ctx.message.add_reaction("✅")
