@@ -38,9 +38,12 @@ class deGen(commands.Cog):
     async def red_delete_data_for_user(self, *, requester, user_id: int) -> None:
         pass
     
-    async def sendhookEngine(self, member: discord.Member, messageObj, webhookText=None, webhookUser=None, webhookAvatar=None):
+    async def sendhookEngine(self, ctgx, messageObj, webhookText=None, webhookUser=None, webhookAvatar=None, member: discord.Member, channel: discord.TextChannel=None):
+        if channel == None:
+            channel = ctx.message.channel
         # Start webhook session
         async with aiohttp.ClientSession() as session:
+            
             webhook = await ctx.channel.create_webhook(name=member.name)
 
             # Check for attachments
