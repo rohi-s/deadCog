@@ -14,8 +14,16 @@ from redbot.core.utils.chat_formatting import (
     humanize_timedelta,
 )
 
+_ = T_ = Translator("General", __file__)
+
+@cog_i18n(_)
 class deGen(commands.Cog):
     """My custom General cog"""
+    
+    global _
+    _ = lambda s: s
+    
+    _ = T_
 
     def __init__(self, bot):
         self.bot = bot
