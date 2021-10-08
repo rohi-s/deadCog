@@ -56,6 +56,7 @@ class deGen(commands.Cog):
                 for msgAttach in messageObj.attachments:
                     try:
                         await webhook.send(
+                            webhookText,
                             username=webhookUser,
                             avatar_url=webhookAvatar,
                             file=await msgAttach.to_file(spoiler=True)
