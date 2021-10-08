@@ -45,13 +45,6 @@ class deGen(commands.Cog):
 
             # Check for attachments
             if messageObj.attachments:
-                # Send message first if there is a message
-                if webhookText is not None:
-                    await webhook.send(
-                        webhookText,
-                        username=webhookUser,
-                        avatar_url=webhookAvatar
-                    )
                 # Then send each attachment in separate messages
                 for msgAttach in messageObj.attachments:
                     try:
@@ -69,11 +62,9 @@ class deGen(commands.Cog):
                             avatar_url=webhookAvatar
                         )
             else:
-                await webhook.send(
-                    webhookText,
-                    username=webhookUser,
-                    avatar_url=webhookAvatar
-                )
+                await ctx.send("You didn't attach any images or videos for me to spoil.")
+            
+            
 
 
     @commands.command()
@@ -181,4 +172,7 @@ class deGen(commands.Cog):
         except:
             await ctx.send("Oops, an error occurred :'(")
         else:
-            await ctx.message.add_reaction("✅")
+            if ctx.message.channel.permissions_for(me).manage_messages:
+                await ctx.message.delete(delay=0)
+            else:
+                await ctx.message.add_reaction("✅")
