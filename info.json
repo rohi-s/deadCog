@@ -1,0 +1,8 @@
+{
+  "author" : ["rohi-s"],
+  "install_msg" : "thanks for installing! here are some dead cogs",
+  "name" : "deadCog",
+  "short" : "Cogs",
+  "description" : "dumping some red bot cogs",
+  "tags" : ["services"]
+}
