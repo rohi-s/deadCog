@@ -1,1 +1,11 @@
-
+{
+  "author" : ["rohi-s"],
+  "install_msg" : "Thanks for installing, though its just a dump cog",
+  "name" : "degeneral",
+  "short" : "Replacement for 'General' cog, with some common tools",
+  "requirements" : [],
+  "description" : "Replacement for 'General' cog, since it needs to be disabled to override certain commands. Changes 'choose' to use | divider.",
+  "permissions" : [],
+  "end_user_data_statement" : "This cog does not store any End User Data.",
+  "tags" : ["tools", "urban"]
+}
