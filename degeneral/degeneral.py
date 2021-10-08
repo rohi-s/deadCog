@@ -38,13 +38,12 @@ class deGen(commands.Cog):
     async def red_delete_data_for_user(self, *, requester, user_id: int) -> None:
         pass
     
-    async def sendhookEngine(self, ctx, messageObj, member: discord.Member, channel: discord.TextChannel=None, webhookText=None, webhookUser=None, webhookAvatar=None):
+    async def sendhookEngine(self, ctx, channel: discord.TextChannel=None, messageObj, webhookText=None, webhookUser=None, webhookAvatar=None):
         if channel == None:
             channel = ctx.message.channel
         # Start webhook session
         async with aiohttp.ClientSession() as session:
-            
-            webhook = await ctx.channel.create_webhook(name=member.name)
+            webhook = await channel.create_webhook(name='tet')
 
             # Check for attachments
             if messageObj.attachments:
@@ -68,7 +67,7 @@ class deGen(commands.Cog):
                 await ctx.send("You didn't attach any images or videos for me to spoil.")
                 
             
-            webhooks = await ctx.channel.webhooks()
+            webhooks = await channel.webhooks()
             for webhook in webhooks:
                 await webhook.delete()
             
