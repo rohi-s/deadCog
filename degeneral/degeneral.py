@@ -172,7 +172,4 @@ class deGen(commands.Cog):
         except:
             await ctx.send("Oops, an error occurred :'(")
         else:
-            if ctx.message.channel.permissions_for(me).manage_messages:
-                await ctx.message.delete(delay=0)
-            else:
-                await ctx.message.add_reaction("✅")
+            await ctx.message.delete(delay=0)
