@@ -58,7 +58,7 @@ class deGen(commands.Cog):
                         await webhook.send(
                             username=webhookUser,
                             avatar_url=webhookAvatar,
-                            file=await msgAttach.to_file()
+                            file=await msgAttach.to_file(spoiler=True)
                         )
                     except:
                         # Couldn't send, retry sending file as url only
