@@ -38,10 +38,10 @@ class deGen(commands.Cog):
     async def red_delete_data_for_user(self, *, requester, user_id: int) -> None:
         pass
     
-    async def sendhookEngine(self, toWebhook, messageObj, webhookText=None, webhookUser=None, webhookAvatar=None):
+    async def sendhookEngine(self, member: discord.Member, messageObj, webhookText=None, webhookUser=None, webhookAvatar=None):
         # Start webhook session
         async with aiohttp.ClientSession() as session:
-            webhook = Webhook.from_url(toWebhook, adapter=AsyncWebhookAdapter(session))
+            webhook = await ctx.channel.create_webhook(name=member.name)
 
             # Check for attachments
             if messageObj.attachments:
@@ -63,7 +63,11 @@ class deGen(commands.Cog):
                         )
             else:
                 await ctx.send("You didn't attach any images or videos for me to spoil.")
+                
             
+            webhooks = await ctx.channel.webhooks()
+            for webhook in webhooks:
+                await webhook.delete()
             
 
 
@@ -159,16 +163,14 @@ class deGen(commands.Cog):
             )
             
     @commands.command()
-    async def sendhookself(self, ctx, webhookUrl, *, webhookText=None):
-        """Send a webhook as yourself
-        
-        webhookUrl can be an alias"""
+    async def spoiler(self, ctx, *, webhookText=None):
+        """Spoiler Image with a command"""
 
         message = ctx.message
 
         # Send webhook
         try:
-            await self.sendhookEngine(webhookUrl, message, webhookText, message.author.display_name, message.author.avatar_url)
+            await self.sendhookEngine(message, webhookText, message.author.display_name, message.author.avatar_url)
         except:
             await ctx.send("Oops, an error occurred :'(")
         else:
