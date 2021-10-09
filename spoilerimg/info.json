@@ -1,0 +1,11 @@
+{
+  "author" : ["rohi-s"],
+  "install_msg" : "Thanks for installing!!",
+  "name" : "spoilerimg",
+  "short" : "Spoiler Images using a command",
+  "requirements" : [],
+  "description" : "Spoiler image using a command or enable button to spoiler any image",
+  "permissions" : [],
+  "end_user_data_statement" : "This cog does not store any End User Data.",
+  "tags" : ["tools", "spoiler", "image"]
+}
