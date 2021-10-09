@@ -77,7 +77,7 @@ class spoilerimg(commands.Cog):
         ):
             await channel.send("You didn't attach any images or videos for me to spoil.")
         else:
-            webhook = await channel.create_webhook(name=message.author.display_name,avatar=message.author.avatar)
+            webhook = await channel.create_webhook(name=message.author.display_name,avatar=message.author.avatar_url)
             await self.sendhookEngine(webhook, message, textmessage, message.author.display_name, message.author.avatar_url)
             await message.delete(delay=0)
             await webhook.delete()
@@ -148,7 +148,7 @@ class spoilerimg(commands.Cog):
         else:
             channel = message.channel
 
-            webhook = await channel.create_webhook(name=message.author.display_name)
+            webhook = await channel.create_webhook(name=message.author.display_name,avatar=message.author.avatar_url)
             await self.sendhookEngine(webhook, message, textmessage, message.author.display_name, message.author.avatar_url)
             await message.delete(delay=0)
             await webhook.delete()
