@@ -1,8 +1,6 @@
 #general cog but no hug
 
 import discord
-from discord import Webhook, AsyncWebhookAdapter
-import asyncio
 import requests
 import json
 import urllib.parse
@@ -21,8 +19,8 @@ from redbot.core.utils.chat_formatting import (
 _ = T_ = Translator("General", __file__)
 
 @cog_i18n(_)
-class deGen(commands.Cog):
-    """My custom General cog"""
+class degeneral(commands.Cog):
+    """General cog - Urban Dictionary"""
     
     global _
     _ = lambda s: s
@@ -32,42 +30,7 @@ class deGen(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         
-    # This cog does not store any End User Data
-    async def red_get_data_for_user(self, *, user_id: int):
-        return {}
-    async def red_delete_data_for_user(self, *, requester, user_id: int) -> None:
-        pass
-    
-    async def sendhookEngine(self, toWebhook, messageObj, webhookText=None, webhookUser=None, webhookAvatar=None):
-        # Start webhook session
-        async with aiohttp.ClientSession() as session:
-            webhook = Webhook.from_url(toWebhook, adapter=AsyncWebhookAdapter(session))
-
-            # Check for attachments
-            if messageObj.attachments:
-                # Then send each attachment in separate messages
-                for msgAttach in messageObj.attachments:
-                    try:
-                        await webhook.send(
-                            webhookText,
-                            username=webhookUser,
-                            avatar_url=webhookAvatar,
-                            file=await msgAttach.to_file(spoiler=True)
-                        )
-                    except:
-                        # Couldn't send, retry sending file as url only
-                        await webhook.send(
-                            "File: "+str(msgAttach.url), 
-                            username=webhookUser,
-                            avatar_url=webhookAvatar
-                        )
-            else:
-                await ctx.send("You didn't attach any images or videos for me to spoil.")
-                
-            
-            
-
-
+        
     @commands.command()
     async def urban(self, ctx, *, word):
         """Search the Urban Dictionary.
@@ -158,17 +121,3 @@ class deGen(commands.Cog):
             await ctx.send(
                 _("No Urban Dictionary entries were found, or there was an error in the process.")
             )
-            
-    @commands.command()
-    async def spoiler(self, ctx, webhookUrl, *, webhookText=None):
-        """Spoiler Image with a command"""
-
-        message = ctx.message
-
-        # Send webhook
-        try:
-            await self.sendhookEngine(webhookUrl, message, webhookText, message.author.display_name, message.author.avatar_url)
-        except:
-            await ctx.send("Oops, an error occurred :'(")
-        else:
-            await ctx.message.delete(delay=0)
